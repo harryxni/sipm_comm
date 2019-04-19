@@ -23,8 +23,8 @@ while (on):
     mode = input('Mode: ')
 
     if mode == ('raw serial'):
-        ss.rawSerial()
+        sipm1.rawSerial()
     elif mode.contains('change HV'):
-        ss.changeHV()
+        sipm1.changeHV()
     elif mode.contains('count rate'):
-        ss.countRate()
+        sipm1.countRate()
