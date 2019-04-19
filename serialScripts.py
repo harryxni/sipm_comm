@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import serial
 import sys
-
+import time
 
 class ArduSiPM:
     def __init__(self, in_port):
@@ -19,7 +19,15 @@ class ArduSiPM:
         pass
     def rawSerial(self):
         return(self.sr.readline())
-    def countRate(self,time):
+    def countRate(self,amt_time):
+        #time in seconds
+        stop_time=time.time() + amt_time
+        while time.time<stop_time:
+            line=self.rawSerial()
+            if 'V' in line:
+                print('Muon')
+        
+        
         pass
 
 
