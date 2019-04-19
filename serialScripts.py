@@ -18,13 +18,13 @@ class ArduSiPM:
     def changeHV(self,value):
         pass
     def rawSerial(self):
-        return(self.sr.readline())
+        return(str(self.sr.readline()))
     def countRate(self,amt_time):
         #time in seconds
         stop_time=time.time() + amt_time
-        while time.time<stop_time:
+        while time.time()<stop_time:
             line=self.rawSerial()
-            if 'V' in line:
+            if 'v' in line:
                 print('Muon')
         
         

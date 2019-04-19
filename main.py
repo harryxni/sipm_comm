@@ -32,4 +32,4 @@ while (on):
     elif 'count rate' in mode:
         time_amt=[int(s) for s in mode.split(' ') if s.isdigit()]
         print(time_amt)
-	sipm1.countRate(time_amt[0])
+        sipm1.countRate(time_amt[0])
