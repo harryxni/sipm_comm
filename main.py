@@ -23,7 +23,10 @@ while (on):
     mode = input('Mode: ')
 
     if mode == ('raw serial'):
-        ss.rawSerial()
+        on=True
+        while on:
+            print(ss.rawSerial())
+
     elif mode.contains('change HV'):
         ss.changeHV()
     elif mode.contains('count rate'):
