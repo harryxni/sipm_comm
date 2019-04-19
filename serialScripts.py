@@ -22,12 +22,13 @@ class ArduSiPM:
     def countRate(self,amt_time):
         #time in seconds
         stop_time=time.time() + amt_time
+        num_muons=0
         while time.time()<stop_time:
             line=self.rawSerial()
-            num_muons=0
             if 'v' in line:
                 print('muon')
-                num_muons+=line[-5] 
+                loc=line.index('$')
+                num_muons+=int(line[loc+1]) 
                 print(num_muons) 
         
         
