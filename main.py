@@ -9,6 +9,12 @@ import serialScripts as ss
 
 #Main.py handles most of the command line input/output 
 
+if len(sys.argv)<2:
+    port=input('ArduSiPM Port Name: ')
+else:
+    port=sys.argv[1]
+
+sipm1=ss.ArduSiPM(port)
 
 on=True
 while (on):
