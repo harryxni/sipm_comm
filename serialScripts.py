@@ -18,7 +18,7 @@ class ArduSiPM:
     def changeHV(self,value):
         pass
     def rawSerial(self,value):
-        return((self.sr.readline())
+        return(self.sr.readline())
     def countRate(self,time):
         pass
 
