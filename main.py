@@ -25,7 +25,7 @@ while (on):
     if mode == ('raw serial'):
         on=True
         while on:
-            print(ss.rawSerial())
+            print(sipm1.rawSerial())
 
     elif mode.contains('change HV'):
         sipm1.changeHV()
