@@ -24,10 +24,11 @@ class ArduSiPM:
         stop_time=time.time() + amt_time
         while time.time<stop_time:
             line=self.rawSerial()
+            num_muons=0
             if 'V' in line:
-                print('Muon')
-        
-        
+                print('muon')
+                num_muons+=line[-5] 
+                print(num_muons) 
         pass
 
 
