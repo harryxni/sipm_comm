@@ -29,5 +29,6 @@ while (on):
 
     elif 'change HV' in mode:
         sipm1.changeHV()
-    elif mode.contains('count rate'):
-        sipm1.countRate()
+    elif contains'count rate' in mode:
+        time_amt=[int(s) for s in str.split() if s.isdigit()]
+        sipm1.countRate(time_amt)
