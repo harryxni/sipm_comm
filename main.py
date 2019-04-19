@@ -28,6 +28,6 @@ while (on):
             print(ss.rawSerial())
 
     elif mode.contains('change HV'):
-        ss.changeHV()
+        sipm1.changeHV()
     elif mode.contains('count rate'):
-        ss.countRate()
+        sipm1.countRate()
