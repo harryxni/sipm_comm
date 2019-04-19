@@ -2,25 +2,25 @@
 import serial
 import sys
 
-if len(sys.argv)<2:
-    port=input('ArduSiPM Port Name: ')
-else:
-    port=sys.argv[1]
 
-sr=None
-while(sr is None):
-    try:
-        sr=setSer(port)
-    except:
-        print('Device not found.')
-        port=input('Please Enter the Port: ')
-        sr=None
-        
-def changeHV(value):
-    pass
-def rawSerial(value):
-    pass
-def countRate(time):
-    pass
+class ArduSiPM:
+    def __int__(self, in_port):
+        port=in_port
+        self.sr=None
+        while(sr is None):
+            try:
+                self.sr=serial.Serial(port, 115200)
+            except:
+                print('Device not found.')
+                port=input('Please Enter the Port: ')
+                sr=None
+
+    def changeHV(self,value):
+        pass
+    def rawSerial(self,value):
+        while(1==1):
+            print(self.sr.readline())
+    def countRate(self,time):
+        pass
 
 
