@@ -27,7 +27,7 @@ while (on):
         while on:
             print(sipm1.rawSerial())
 
-    elif mode.contains('change HV'):
+    elif 'change HV' in mode:
         sipm1.changeHV()
     elif mode.contains('count rate'):
         sipm1.countRate()
