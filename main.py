@@ -11,6 +11,7 @@ import serialScripts as ss
 
 if len(sys.argv)<2:
     port=input('ArduSiPM Port Name: ')
+    sipm1=ss.ArduSiPM(port)
 elif len(sys.argv)==2:
     port1=sys.argv[1]
     sipm1=ss.ArduSiPM(port1)
@@ -21,18 +22,18 @@ elif len(sys.argv)==3:
 
 on=True
 while (on):
-    print('Functionality: \n \"raw serial\" | Prints Raw Serial Output \n \"change HV\" [value (V)] | changes the High Voltage to value given\n \"count rate" [time (s)] | measure the count rate over given time in seconds' )
+    print('Functionality: \n \"rawserial\" | Prints Raw Serial Output \n \"changeHV\" [value (V)] | changes the High Voltage to value given\n \"countrate" [time (s)] | measure the count rate over given time in seconds' )
     
     mode = input('Mode: ')
 
-    if mode == ('raw serial'):
+    if mode == ('rawserial'):
         on=True
         while on:
             print(sipm1.rawSerial())
 
-    elif 'change HV' in mode:
+    elif 'changeHV' in mode:
         sipm1.changeHV()
-    elif 'count rate' in mode:
+    elif 'countrate' in mode:
         time_amt=[int(s) for s in mode.split(' ') if s.isdigit()]
         print(time_amt)
-        sipm1.countRate(time_amt[0])
+        print('Count Rate #/s: ' + str(sipm1.countRate(time_amt[0])))
