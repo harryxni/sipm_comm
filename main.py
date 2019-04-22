@@ -11,10 +11,13 @@ import serialScripts as ss
 
 if len(sys.argv)<2:
     port=input('ArduSiPM Port Name: ')
-else:
-    port=sys.argv[1]
-
-sipm1=ss.ArduSiPM(port)
+elif len(sys.argv)==2:
+    port1=sys.argv[1]
+    sipm1=ss.ArduSiPM(port1)
+elif len(sys.argv)==3:
+    port1=sys.argv[1]
+    port2=sys.argv[2]
+    sipm2=ss.ArduSiPM(port2)
 
 on=True
 while (on):

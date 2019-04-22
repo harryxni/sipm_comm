@@ -16,6 +16,12 @@ class ArduSiPM:
                 self.sr=None
 
     def changeHV(self,value):
+        self.sr.Write('m')
+        self.sr.Write('h')
+        pass
+    def changeThres(self, value):
+        pass
+    def changeSampelT(self, value):
         pass
     def rawSerial(self):
         return(str(self.sr.readline()))
@@ -29,9 +35,6 @@ class ArduSiPM:
                 print('muon')
                 loc=line.index('$')
                 num_muons+=int(line[loc+1]) 
-                print(num_muons) 
-        
-        
-        pass
-
-
+                print(num_muons)
+            rate=num_muons/amt_time
+        return(rate)
