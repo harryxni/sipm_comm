@@ -22,18 +22,22 @@ elif len(sys.argv)==3:
 
 on=True
 while (on):
-    print('Functionality: \n \"rawserial\" | Prints Raw Serial Output \n \"changeHV\" [value (V)] | changes the High Voltage to value given\n \"countrate" [time (s)] | measure the count rate over given time in seconds' )
+    print('Functionality: \n \"rawserial\" | Prints Raw Serial Output \n \"changeV\" [value (V)] | changes the High Voltage to value given\n \"countrate" [time (s)] | measure the count rate over given time in seconds' )
     
     mode = input('Mode: ')
+    args = mode.split(' ')
 
-    if mode == ('rawserial'):
-        on=True
-        while on:
+    if args[0] == ('rawserial'):
+        while 1==1:
             print(sipm1.rawSerial())
+    elif args[0] == 'changeV':
+        v_value = args[1]
+        sipm1.changeHV()v_value
+    elif args[0]== 'countrate':
+        time_amt=int(args[1])
+        print('Taking Data for ' + str(time_amt) + ' seconds' )
+        rate=sipm1.countRate(time_amt)
+        rate_err = np.sqrt(rate)/time_amt
 
-    elif 'changeHV' in mode:
-        sipm1.changeHV()
-    elif 'countrate' in mode:
-        time_amt=[int(s) for s in mode.split(' ') if s.isdigit()]
-        print(time_amt)
-        print('Count Rate #/s: ' + str(sipm1.countRate(time_amt[0])))
+        print('Count Rate #/s: ' + str(rate) + '+\-' + str(rate_err))
+

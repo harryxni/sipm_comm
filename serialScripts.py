@@ -18,7 +18,7 @@ class ArduSiPM:
     def serWrite(self, value):
         time.sleep(0.5)
         self.sr.write(value.encode())
-    def changeHV(self,hv):
+    def changeV(self,hv):
         dac_code=int(1.5 + (71.8 - hv)/0.1786)
     
         self.sr.serWrite('m')
@@ -30,7 +30,7 @@ class ArduSiPM:
         return(dac_code)
     def changeThres(self, value):
         pass
-    def changeSampelT(self, value):
+    def changeSampleT(self, value):
         pass
     def rawSerial(self):
         return(str(self.sr.readline()))
@@ -39,22 +39,20 @@ class ArduSiPM:
         
         self.serWrite('m')
         self.sr.reset_input_buffer()
-        [print(self.sr.readline()) for _ in range(14)]
+        #[print(self.sr.readline()) for _ in range(14)]
         checkline=str(self.sr.readline())
         if 'ENABLE' in checkline:
             self.serWrite('a')
         self.serWrite('e')
-        time.sleep(2)
+        time.sleep(0.5)
         self.sr.reset_input_buffer()
-        print('aaa')
+        #print('aaa')
         stop_time=time.time() + amt_time
         num_muons=0
         while time.time()<stop_time:
             line=self.rawSerial()
-            print(line)
             if 'v' in line and 'Threshold' not in line:
-                print('muon')
-                print(line)
+                print('Muon Detected')
                 loc=line.index('$')
                 num_muons+=int(line[loc+1]) 
                 print(num_muons)
