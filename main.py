@@ -6,7 +6,6 @@ import sys
 f=Figlet(font='univers')
 print(f.renderText('ArduSiPM'))
 import serialScripts as ss
-
 #Main.py handles most of the command line input/output 
 
 if len(sys.argv)<2:
@@ -18,6 +17,7 @@ elif len(sys.argv)==2:
 elif len(sys.argv)==3:
     port1=sys.argv[1]
     port2=sys.argv[2]
+    sipm1=ss.ArduSiPM(port1)
     sipm2=ss.ArduSiPM(port2)
 
 on=True
@@ -31,13 +31,23 @@ while (on):
         while 1==1:
             print(sipm1.rawSerial())
     elif args[0] == 'changeV':
-        v_value = args[1]
-        sipm1.changeHV()v_value
+        v_value = float(args[1])
+        sipm1.changeV(v_value)
     elif args[0]== 'countrate':
         time_amt=int(args[1])
         print('Taking Data for ' + str(time_amt) + ' seconds' )
-        rate=sipm1.countRate(time_amt)
-        rate_err = np.sqrt(rate)/time_amt
+        rate, rate_err=sipm1.countRate(time_amt)
 
         print('Count Rate #/s: ' + str(rate) + '+\-' + str(rate_err))
+    
+    elif args[0]=='liveplot':
+        time_amt=int(args[1])
+        sipm1.liveplot(time_amt)
+
+    elif args[0]=='CoincidentCount'
+        time_amt=int(args[1])
+        cc=ss.Coincidence(sipm1,sipm2)
+        cc.countCoincidences(time_amt)
+    elif args[0]=='exit':
+        break
 
