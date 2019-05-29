@@ -68,8 +68,10 @@ class ArduSiPM:
         tdcs=[]
         while time.time()<stop_time:
             line=self.rawSerial()
+            count_loc=line.index('$')
+
             print(line)
-            if 'v' in line and 'Threshold' not in line:
+            if 'v' in line and line[count_loc+1]!='0':
                 count, adc_val, tdc_val=self.lineRead(line)
                 num_muons+=count
                 if count==1:
@@ -91,7 +93,7 @@ class ArduSiPM:
 
         plt.hist(dec_adcs)
         plt.show()
-        return rate, error
+        return rate, error, dec_adcs, dec_tdcs
     
     def animate(self, amt_time): 
         self.serWrite('@')
@@ -140,8 +142,9 @@ class Coincidence:
             if 'v' in prim_line and 'v' in rep_line:
                 p_results=prim.lineRead(prim_line)
                 r_results=rep.lineRead(rep_line)
-                num_coin+=count
-                print('Coincidence Detected')
+                num_coin+=p_results[1]
+
+                print('Coincidence Detected within One Second')
 
                 if count==1:
                     if p_results[2]==r_results[2]:

@@ -6,6 +6,7 @@ import sys
 f=Figlet(font='univers')
 print(f.renderText('ArduSiPM'))
 import serialScripts as ss
+import csv
 #Main.py handles most of the command line input/output 
 
 if len(sys.argv)<2:
@@ -22,7 +23,7 @@ elif len(sys.argv)==3:
 
 on=True
 while (on):
-    print('Functionality: \n \"rawserial\" | Prints Raw Serial Output \n \"changeV\" [value (V)] | changes the High Voltage to value given\n \"countrate" [time (s)] | measure the count rate over given time in seconds' )
+    print('Functionality: \n \"rawserial\" | Prints Raw Serial Output \n \"changeV\" [value (V)] | changes the High Voltage to value given\n \"countrate" [time (s)] | measure the count rate over given time in seconds \n \"CoincidentCount" [time (s)] | Count coincident triggers for time given in seconds \n \"exit" |Closes Program' )
     
     mode = input('Mode: ')
     args = mode.split(' ')
@@ -36,15 +37,23 @@ while (on):
     elif args[0]== 'countrate':
         time_amt=int(args[1])
         print('Taking Data for ' + str(time_amt) + ' seconds' )
-        rate, rate_err=sipm1.countRate(time_amt)
+        rate, rate_err, adcs, tdcs=sipm1.countRate(time_amt)
 
         print('Count Rate #/s: ' + str(rate) + '+\-' + str(rate_err))
-    
+        save_vals=input('Save Data[y/n]: ')
+        if save_vals=='y':
+            filename=input('Filename: ' )
+            with open(filename, 'w') as f:
+                
+                writer=csv.writer(f, delimiter='\t')
+                writer.writerows(zip(tdcs,adcs))
+
+
     elif args[0]=='liveplot':
         time_amt=int(args[1])
         sipm1.liveplot(time_amt)
 
-    elif args[0]=='CoincidentCount'
+    elif args[0]=='CoincidentCount':
         time_amt=int(args[1])
         cc=ss.Coincidence(sipm1,sipm2)
         cc.countCoincidences(time_amt)
