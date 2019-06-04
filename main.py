@@ -44,7 +44,13 @@ while (on):
         if save_vals=='y':
             filename=input('Filename: ' )
             with open(filename, 'w') as f:
-                
+                hv, thr, sr = sipm1.getInfo()
+                f.write('Count Rate:' + str(rate) + '\n')
+                f.write('Run Time (s): ' + str(time_amt) + '\n')
+                f.write(hv + '\n')
+                f.write(thr + '\n')
+                f.write(sr + '\n')
+
                 writer=csv.writer(f, delimiter='\t')
                 writer.writerows(zip(tdcs,adcs))
 
@@ -57,6 +63,9 @@ while (on):
         time_amt=int(args[1])
         cc=ss.Coincidence(sipm1,sipm2)
         cc.countCoincidences(time_amt)
+    elif args[0]=='getinfo':
+        sipm1.getInfo()
+
     elif args[0]=='exit':
         break
 

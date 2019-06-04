@@ -20,6 +20,27 @@ class ArduSiPM:
     def serWrite(self, value):
         self.sr.write(value.encode())
     
+    def getInfo(self):
+        self.sr.reset_input_buffer()
+        self.serWrite('m')
+        time.sleep(1)
+        menulines=''
+        while self.sr.inWaiting()>0:
+            menulines+= (self.sr.readline()).decode('UTF-8')
+        
+        self.serWrite('e')
+        lines=menulines.splitlines()
+        hv_string=[x for x in lines if 'HVCODE' in x and '=' in x][0]
+        thr_string=[x for x in lines if 'Threshold (mv)' in x and '=' in x][0]
+        rate_string=[x for x in lines if 'Sample rate' in x and '=' in x][0]
+        print(hv_string)
+        print(thr_string)
+        print(rate_string)
+
+        return hv_string, thr_string, rate_string 
+
+
+
     def changeV(self,hv):
         dac_code=int(1.5 + (71.8 - hv)/0.1786)
         self.serWrite('%' + str(dac_code))
@@ -44,8 +65,8 @@ class ArduSiPM:
         if num==1:
             adc=line_in[loc+1:endloc] 
             tdc=line_in[tloc+1: loc]
-            print(adc)
-            print(tdc)
+            #print(adc)
+            #print(tdc)
         elif num>1:
             adc=[]
             tdc=[]
@@ -126,26 +147,37 @@ class Coincidence:
          self.prim=pm1
          self.rep=pm2
     def countCoincidences(self, amt_time):
-        prim.serWrite('@')
-        rep.serWrite('@')
+        self.prim.serWrite('@')
+        self.rep.serWrite('@')
         time.sleep(0.5)
-        prim.sr.reset_input_bufer()
-        rep.sr.reset_input_buffer()
+        self.rep.serWrite('/2')
+        time.sleep(0.5)
+        self.prim.sr.reset_input_buffer()
+        self.rep.sr.reset_input_buffer()
         num_coin=0
         
         stop_time=time.time() + amt_time
 
         while time.time()<stop_time:
-            prim_line=prim.rawSerial()
-            rep_line=rep.rawSerial()
-
+            prim_line=self.prim.rawSerial()
+            rep_line=self.rep.rawSerial()
+            print(prim_line, rep_line)
             if 'v' in prim_line and 'v' in rep_line:
-                p_results=prim.lineRead(prim_line)
-                r_results=rep.lineRead(rep_line)
-                num_coin+=p_results[1]
+                p_results=self.prim.lineRead(prim_line)
+                r_results=self.rep.lineRead(rep_line)
+                num_coin+=int(p_results[0])
 
                 print('Coincidence Detected within One Second')
+               if p_results[0] != 1 or r_results[0] !=1:
+                    min_num=(p_results[0], r_results[0])
+                    min_results=[x for x in [p_results, r_results] if x[0]==min_num]
+                    print(min_results)
+                else:
+                     p_tdc=int(p_results[2],16)
+                    r_tdc=int(r_results[2],16)
+                
+                    print('Difference of' + str(np.abs(p_tdc-r_tdc)) + ' microseconds')
 
-                if count==1:
-                    if p_results[2]==r_results[2]:
-                        print('Microsecond Coincidence')
+                #if p_results[0]==1:
+                #    if p_results[2]==r_results[2]:
+                #        print('Microsecond Coincidence')
