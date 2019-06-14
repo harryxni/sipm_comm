@@ -54,7 +54,7 @@ class ArduSiPM:
         pass
     
     def rawSerial(self):
-        return(str(self.sr.readline()))
+        return((self.sr.readline().decode('UTF-8')))
 
     def lineRead(self,line_in):
         #line_in is a line which includes ADC and TDC data from serial
@@ -87,11 +87,16 @@ class ArduSiPM:
         num_muons=0
         adcs=[]
         tdcs=[]
+        f=open('log.txt', 'w+')
+        f.write(str(time.time()) +'\n')
+        time.sleep(3)
+        self.sr.reset_input_buffer()
         while time.time()<stop_time:
             line=self.rawSerial()
             count_loc=line.index('$')
-
-            print(line)
+            
+            f.write(line)
+            print(line.strip())
             if 'v' in line and line[count_loc+1]!='0':
                 count, adc_val, tdc_val=self.lineRead(line)
                 num_muons+=count
@@ -107,13 +112,12 @@ class ArduSiPM:
                 print(num_muons)
             rate=num_muons/amt_time
             error=np.sqrt(num_muons)/amt_time 
+        
         print(adcs)
         print(tdcs)
         dec_adcs=[int(x,16) for x in adcs]
         dec_tdcs=[int(x,16) for x in tdcs]
 
-        plt.hist(dec_adcs)
-        plt.show()
         return rate, error, dec_adcs, dec_tdcs
     
     def animate(self, amt_time): 
@@ -168,12 +172,12 @@ class Coincidence:
                 num_coin+=int(p_results[0])
 
                 print('Coincidence Detected within One Second')
-               if p_results[0] != 1 or r_results[0] !=1:
+                if p_results[0] != 1 or r_results[0] !=1:
                     min_num=(p_results[0], r_results[0])
                     min_results=[x for x in [p_results, r_results] if x[0]==min_num]
                     print(min_results)
                 else:
-                     p_tdc=int(p_results[2],16)
+                    p_tdc=int(p_results[2],16)
                     r_tdc=int(r_results[2],16)
                 
                     print('Difference of' + str(np.abs(p_tdc-r_tdc)) + ' microseconds')
